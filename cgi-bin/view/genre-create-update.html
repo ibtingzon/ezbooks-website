@@ -1,0 +1,89 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+    <style>
+            body {
+                padding-top: 70px;
+                background-color: #eee;
+            }
+            .panel-body{
+              height: 300px;
+            }
+            .lead{
+              font-size: 17px;
+            }
+            hr {
+              display: block;
+              height: 1px;
+              border: 0;
+              border-top: 1px solid #ccc;
+              margin: 1em 0;
+              padding: 0; 
+          	}
+    </style>
+    <link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+	<link type="text/css" href="view/css/jquery-ui.css" rel="stylesheet">
+	 
+    <div class="col-sm-9" style="overflow:visible;">
+    {% if genre == None %}
+	<div class="list-group-item" style="background-color:#222; color:#aaa; "> <h4>Create New Comic Genre </h4></div>
+    {% endif %}
+    <div class="thumbnail" style="padding:50px; padding-top:20px; padding-bottom:20px; overflow: visible;">
+
+	{% if (user[9]=='Y') -%}
+	    {%- if error -%}
+                        <div class="alert alert-danger">
+                                {{error}}
+                        </div>
+            {%- elif success -%}
+                        <div class="alert alert-success">
+                                {{success}}
+                        </div>
+            {% endif %}
+
+        <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+         
+		<form  id="form-user" method="post"  action="create-update-genre.py?action=save">
+            <h3><strong>
+		{% if genre != None %}
+			{{genreform[0]}}
+			<input class="form-control" name="genre" type="hidden" value="{{genreform[0]}}" />
+		{% else %}
+		 	<input class="form-control" name="genrecreate" type="text" placeholder="Genre" value="{{genreform[0]}}" style="width:330px;"  required /> 
+		{% endif %}
+            </strong></h3>
+	    <hr>
+		<textarea class="form-control" name="genredesc" type="text" rows="3"  placeholder="Description" required>{{genreform[1]}}</textarea>
+		<br/>
+		<p><strong>Associated Comic Books </strong> </p>
+		<select id="genre-books" name="genrebooks" multiple="multiple">
+    	 {{bookitems}}
+		</select>
+		<!-- Initialize the plugin: -->
+		<script type="text/javascript">
+    			$(document).ready(function() {
+        			$('#genre-books').multiselect({includeSelectAllOption: true,enableFiltering: true});
+    			});
+		</script>
+		<br> <br>
+	    <p align="right">
+			<input class="btn btn-success" type="submit" value="Save" style="width:100px;"></input>
+			{% if genre == None %}
+				<a class="btn btn-danger" href="home.py?" role="button" style="width:100px;">Cancel</a>
+			{% else %}
+				<a class="btn btn-danger" href="home.py?genre={{genreform[0]}}" role="button" style="width:100px;">Cancel</a>
+			{% endif %} 
+        </p>
+	    </form >
+	
+	{% else %}
+	<div class="panel panel-danger">
+		<div class="panel-body">You don't have permission to access this page!</div>
+        </div>
+	{% endif %}  
+	</div>    
+	</div>  
+    
+{% endblock %}

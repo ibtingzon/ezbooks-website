@@ -1,0 +1,19 @@
+- Sessions 				[DONE]
+- Book Profile 			[DONE]
+- Author Profile 		[DONE]
+- User Profile 			[DONE]
+	- Basic Info 		[DONE]
+	- User Cart 		[DONE]
+	- User Owned Books 	[DONE]
+	- Edit Profile 		[DONE]
+- Shopping Cart 		[DONE]
+	- Payment Page 		[DONE]
+- Populate Database (Around 50 - 100 entries if possible) [DONE]
+
+- Admin Module
+	- Add Book
+	- Update Book Details
+	- Delete Book
+
+Create Error 404 Page
+

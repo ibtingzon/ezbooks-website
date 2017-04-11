@@ -1,0 +1,94 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+	<link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+            <div class="col-md-9">
+		{%- if error -%}
+                	<div class="alert alert-danger">
+                        	{{error}}
+                	</div>
+		{%- elif success -%}
+			<div class="alert alert-success">
+                        	{{success}}
+                	</div>
+                {% endif %}
+                <div class="thumbnail">
+                	<div class="col-md-4 left-side">
+                        <center>
+                            <img class="img-responsive" src="{{writer[5]}}" style="width:200px;padding-top:30px;padding-bottom:20px;">
+                    </center>
+                    </div>
+                    <div id="desc" class="col-md-8 right-side" style="padding-top:25px">
+                        <header>  
+                        <h4>
+				<strong>{{writer[0]}}</strong>
+				{% if user[9] == "Y" %}
+					<div style="float:right">
+        	    				<a class="btn btn-sm btn-primary" href="writer-profile.py?writer={{writer[0]}}&action=edit" role="button">Edit Profile</a>
+						<a class="btn btn-sm btn-danger" role="button" onclick="confirmDelete('{{writer[0]}}')">Delete</a>
+						<a id="continue-deletion" style="display:none" href="delete-writer.py?writer={{writer[0]}}"></a>
+						<script>
+							function confirmDelete(writer) {
+								if (confirm('Are you sure you want to delete writer ' + writer + '?')) {
+									document.getElementById("continue-deletion").click()
+								}
+							}
+						</script>
+					</div>
+        			{% endif %}
+			</h4> 
+                        </header>                        
+                        <hr>
+                        <h5>
+                        <p><strong>Born: </strong> 
+                            {%- if writer[2] != None -%} 
+                                {{writer[2]}} 
+                            {% endif %} 
+                            {%- if writer[3] != "" -%}
+                                in {{writer[3]}} 
+                            {% endif %} 
+                            {%- if (writer[2] == None) and  (writer[3] == "") -%}
+                                Information not available.
+                            {% endif %}
+                        </p>
+                        <p><strong>Gender:</strong> {{writer[4]}}</p>
+                        <p><strong>Genres:</strong> {% for genre in genres %} 
+                            <a href="home.py?genre={{genre[0]}}">{{genre[0]}} </a>
+                            {%- if loop.index < genres|length -%}
+                            ,
+                            {% endif %}  {% endfor %}</p> 
+                        </h5>
+                        <p><strong>About this writer</strong>: 
+                            <div class="comment more" style="padding-bottom:30px">
+                            {%- if writer[1] == None -%} 
+                                No description available 
+                            {% else %} 
+                                {{writer[1]}}
+                            {% endif %} 
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            <br>
+            <h4>{{writer[0]}}'s Books</h4>
+            <hr>
+            <p>
+            <div class="row">
+            {% for title in titles %}
+            <div class="col-sm- col-lg-3">
+              <div class="panel panel-default">
+              <div class="panel-body" style="height:300px;">
+              <center> 
+              <a href="comic-book-item.py?ISBN={{title[0]}}" ><img src= {{title[3]}} style="height:170px;" margin=15px> </img></a>
+              <h5><a href="comic-book-item.py?ISBN={{title[0]}}" style="color: #B00000 ">{{title[1]}}</a></h5>
+              <p><h6>Price: P{{title[2]}}</h6></p>
+              <p><a class="btn btn-info" href="comic-book-item.py?ISBN={{title[0]}}" role="button">Learn more &raquo;</a></p>
+              </center>
+            </div>
+            </div>
+            </div><!--/.col-xs-6.col-lg-4-->
+            {% endfor %}
+          </div><!--/row-->
+                </div>
+
+{% endblock %}

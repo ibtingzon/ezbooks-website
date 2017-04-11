@@ -1,0 +1,49 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+	<link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+            <div class="col-md-9">
+                <div class="thumbnail">
+                    <div style="padding:40px" align="center">
+                        <header> 
+				<h4>
+					<strong>Credit Card Payment</strong>
+					<br />
+					<img class="img-responsive" src="model/images/mc_ms_vs_ax_accpt_h_038_gif.gif" />
+				</h4> 
+			</header>  
+                        <hr>
+                        <form action="payment-page.py" method="POST">
+			    <input type="hidden" id="email" name="email" class="form-control" value="{{user[2]}}">
+			    <table>
+				<tr>
+                                        <td><strong>Credit Card Type:&nbsp</strong></td>
+                                        <td width="70%">
+						<select class="form-control" style="width:60%">
+							<option value="Mastercard">Mastercard</option>
+  							<option value="Maestro">Maestro</option>
+  							<option value="VISA">VISA</option>
+  							<option value="AMEX">Amex</option>
+						</select>
+					</td>
+                                </tr>
+				<tr><td></br></td></tr>
+                            	<tr>
+					<td><strong>Credit Card Number:&nbsp</strong></td>
+                            		<td><input type="text" maxlength="16" id="creditcard" name="creditcard" class="form-control" style="width:60%" required autofocus></td>
+				</tr>
+				<tr><td></br></td></tr>
+				<tr>
+                                        <td><strong>Delivery Address:&nbsp</strong></td>
+                                        <td><textarea class="form-control" name="deliveryaddress" type="text" rows="3" required></textarea></td>
+                                </tr>
+			    </table>
+			    </br>
+                            <button type="submit" id="btn" class="btn btn-success" style="width:18%">Submit</button>
+			    <a href="shopping-cart.py" class="btn btn-default">Back</a>
+                        </form>
+                    </div>
+                </div>           
+            </div>
+
+{% endblock %}

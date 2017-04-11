@@ -1,0 +1,157 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+<style>
+a.morelink {
+    text-decoration:none;
+    outline: none;
+}
+.morecontent span {
+    display: none;
+}
+</style>
+    {%- if success != None -%}
+        <div class="alert alert-success">
+                {{success}}
+        </div>
+    {% endif %}
+    {%- if error != None -%}
+        <div class="alert alert-danger" role="alert">
+                {{error}}
+        </div>
+    {% endif %}
+	<link type="text/css" href="view/css/book-item.css" rel="stylesheet">
+            <div class="col-md-9">
+                <div class="thumbnail">
+                	<div class="col-md-4 left-side">
+                        <center>
+                        <img class="img-responsive" src={{book[5]}} style="width:200px;padding-top:30px;padding-bottom:20px;">
+			{% if book[9] > 0 %}
+				{{book[9]}} item(s) left
+			{% else %}
+				Out of stock
+			{% endif %} 
+			<br/><br />   
+                        {%- if user[9]=='Y'-%}         
+                        <a class="btn btn-primary" href="update-comic-book.py?ISBN={{book[0]}}&action=edit" role="button">Edit Comic Book</a>
+			<a class="btn btn-danger"  onclick="confirmDeleteBook('{{book[0]}}')" role="button">Delete</a>
+            <a id="continue-deletion" style="display:none" href="delete-comic-book.py?ISBN={{book[0]}}"></a>
+                        <script>
+                            function confirmDeleteBook(comicbook) {
+                                if (confirm('Are you sure you want to delete comic book ' + comicbook + '?')) {
+                                    document.getElementById("continue-deletion").click()
+                                }
+                            }
+                        </script>
+                        {%- elif book[9] > 0  -%}
+                        <div class="btn-group dropup">
+                        <div class="dropdown">
+                                <input type="hidden" id="book" name="book" class="form-control" value="{{book[1]}}">
+                                <input type="hidden" id="price" name="book" class="form-control" value="{{book[2]}}">
+				                
+                                <form id="form" action="add-to-cart.py" method="POST">
+                                <input type="hidden" id="email" name="email" class="form-control" value="{{user[2]}}">
+                                <input type="hidden" id="ISBN" name="ISBN" class="form-control" value="{{book[0]}}">
+                                <button type="submit" id="btn" class="btn btn-success" onclick="onConfirm()" style="width:100%">Add to Cart &raquo;</button>
+                                <script>
+                                function onConfirm() {
+                                    var link;
+                                    book = document.getElementById("book").value
+                                    price = document.getElementById("price").value
+                                    if (confirm("Add " + book + " (PHP" + price + ") to cart?") == true) {
+                                        link = "add-to-cart.py";
+                                    } else {
+                                        link = "comic-book-item.py";
+                                    }
+                                    document.getElementById("form").action = link;
+                                }
+                                </script>
+                                </form>
+                          </div>
+                        </div>
+                        {% endif %}
+                    </center>
+                    </div>
+                    <div id="desc" class="col-md-8 right-side" style="padding-top:25px">
+                        <header>  
+                        <h4><strong>{{book[1]}}</strong></h4> 
+                        <div class="price">
+                        <p class="pull-right" style="font-size:15px;">PHP{{book[2]}}
+                        </p>
+                        </div>  
+                    </header>                        
+                        <h5><bold>by 
+                            {% for writer in writers %}
+                            <a href="writer-profile.py?writer={{writer[0]}}">
+                            {{writer[0]}}</a> 
+                            {%- if loop.index < writers|length -%}
+                            ,
+                            {% endif %} 
+                            </bold>
+                            {% endfor %}
+                            {%- if illustrators|length > 0 -%}
+                            ,
+                            {% endif %} 
+                            {% for illustrator in illustrators %}
+                            <a href="illustrator-profile.py?illustrator={{illustrator[0]}}">
+                            {{illustrator[0]}}</a> <font color="gray">(Illustrator)</font> 
+                            {%- if loop.index < illustrators|length -%}
+                            ,
+                            {% endif %} 
+                            </bold>
+                            {% endfor %}
+                        </h5>
+                        <hr>                      
+                        <div class="comment more">
+                            {%- if book[4] == None -%} 
+                                No description available 
+                            {% else %} 
+                                {{book[4]}}
+                            {% endif %} 
+                            </div>
+                        <hr>
+                        <table border="0" style="font-size:11.5px;width:100%;">
+                        <tr>
+                            <td width="30%"> Format:   </td>
+                            <td> {{book[8]}}
+                              </td>
+                        </tr>
+                        <tr><td > Length:  </td> <td> {{book[7]}} pages   </td></tr>
+                        <tr><td > Publisher:  </td> <td> {{book[3]}}  </td></tr> 
+                        <tr><td > Date Published:  </td> <td> {{book[6]}}  </td></tr>
+                        <tr><td > ISBN:  </td> <td> {{book[0]}}  </td></tr>
+                        {%- if book[10]|length > 0 -%}
+                        <tr><td > Literary Awards:  </td> 
+                            <td> {% for award in book[10] %}
+                            {{award}} 
+                            {%- if loop.index < book[10]|length -%}
+                            ,
+                            {% endif %}
+                            {% endfor %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        <tr><td > Genre:  </td> <td> {% for genre in genres %} 
+                            <a href="home.py?genre={{genre[0]}}">{{genre[0]}} </a>
+                            {%- if loop.index < genres|length -%}
+                            ,
+                            {% endif %}  {% endfor %}
+                          </td></tr> 
+                          
+                        </table>
+                        <hr>
+                        <div class="ratings" style:"position:absolute; bottom:0px;">
+                            <p class="pull-right">3 reviews</p>
+                            <p class="pull-bottom">
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                4.0 stars
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}

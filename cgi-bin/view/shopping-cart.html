@@ -1,0 +1,86 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+<style type="text/css">
+table, th, td {
+    border: 1px solid #ccc;
+}
+th, td {
+    padding: 10px;
+}
+th {
+    background-color: #ddd;
+    color: #333;
+}
+</style>
+	<link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+            <div class="col-md-9">
+                <div class="list-group-item" style="background-color:#222; color:#aaa;"> <h4>EZComics Shopping Cart</h4></div>
+                <div class="thumbnail">
+                    <div style="padding:40px">
+                        <table border="1" style="width:100%">
+                          <tr>
+                            <th width="20%">ISBN</th>
+                            <th>Title</th>
+                            <th  width="10%">Quantity</th>
+                            <th width="15%">Price Per Unit</th>
+                            <th><div align="right">Total Price</div></th>
+                          </tr>
+
+			  <script>
+				function confirmRemove(isbn, title) {
+					if (confirm('Are you sure you want to remove ' + title + ' (' + isbn + ') from cart?')) {
+						document.getElementById('remove-from-cart-' + isbn).click()
+					}
+				}
+			  </script>
+                          {% for title in titles %}
+                          <tr>
+                            <td>
+				<a href="comic-book-item.py?ISBN={{title[0]}}">{{title[0]}}</a>&nbsp;
+				<a id="remove-from-cart-{{title[0]}}" href="remove-from-cart.py?ISBN={{title[0]}}" style="display:none" />
+				<a onclick="confirmRemove('{{title[0]}}', '{{title[1]}}')">
+					<img src="model/images/delete-icon.png" title="Remove From Cart" width="10%" style="display:inline"/>
+				</a>
+			    </td>
+                            <td><a href="comic-book-item.py?ISBN={{title[0]}}">{{title[1]}}</a></td>
+                            <td align="center">
+				{% if title[4] <= 1 %}
+					<img disabled="disabled" src="model/images/filler-icon.png" title="Subtract Quantity" width="25%" style="display:inline"/>
+				{% else %} 
+					<a href="remove-from-cart.py?ISBN={{title[0]}}&action=subtract"><img src="model/images/subtract-icon.png" title="Subtract Quantity" width="25%" style="display:inline"/></a>
+				{% endif %}
+				{{title[4]}}
+				{% if title[4] < title[5] %}
+ 					<a href="add-to-cart.py?ISBN={{title[0]}}"><img src="model/images/add-icon.png" title="Add Quantity" width="25%" style="display:inline"/></a>
+				{% else %}
+					<img disabled="disabled" src="model/images/filler-icon.png" title="Subtract Quantity" width="25%" style="display:inline"/>
+				{% endif %}
+			    </td>
+                            <td align="right">
+				PHP {{title[2]}}
+                            </td>
+                            <td width="130px"><div style= "color:#bb3e4f" align="right">PHP {{title[2] * title[4]}}</div></td>
+                          </tr>
+                          {% endfor %}
+
+                          <tfoot>
+                                <tr class="odd" >
+                                <td colspan="4"><div align="right" class="bold"><strong>Total Amount</strong></div></td>
+                                <td class="right totalAmount"><div style= "color:#bb3e4f" align="right"><strong>PHP {{total}}</strong></div></td>
+                            </tr>
+                        </tfoot>
+                        </table>
+                        <br> <br>
+                        <div align="right"> <a class="btn btn-primary" href="home.py?email={{user[2]}}" role="button">Continue Shopping &raquo;</a> &nbsp;
+                            {%- if total > 0 -%}
+                            <a class="btn btn-success" href="checkout.py?email={{user[2]}}" role="button">Proceed to Payment &raquo;</a> 
+                            {%- else -%}
+                            <a class="btn btn-success disabled" href="checkout.py?email={{user[2]}}" role="button">Proceed to Payment &raquo;</a>
+                            {%- endif -%}
+                        </div> 
+                    </div>
+                </div>           
+            </div>
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+        <style>
+            body {
+                padding-top: 70px;
+                background-color: #eee;
+            }
+            .panel-body{
+              height: 300px;
+            }
+            .lead{
+              font-size: 17px;
+            }
+            hr {
+              display: block;
+              height: 1px;
+              border: 0;
+              border-top: 1px solid #ccc;
+              margin: 1em 0;
+              padding: 0; 
+          }
+        </style>
+
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+            {%- if error -%}
+                        <div class="alert alert-danger">
+                                {{error}}
+                        </div>
+            {%- elif success -%}
+                        <div class="alert alert-success">
+                                {{success}}
+                        </div>
+            {% endif %}
+
+            {%- if genre == None and search == ' ' and publisher == None -%}
+            <h2>Hello, {{user[0]}} {{user[1]}}.</h2>
+            <hr>
+            {%- elif not publisher  and genre==None and (search != None or search == ' ')  -%}
+            <h4>Search Results for '{{search}}'</h4> <hr>
+            {% elif genre != None %}
+            <h2>{{genre}}
+        		{% if user[9] == "Y" %}
+			<div style="float:right">
+        	    		<a class="btn btn-sm btn-primary" href="create-update-genre.py?genre={{genre}}" role="button">Edit Genre</a>
+				<a class="btn btn-sm btn-danger" role="button" onclick="confirmDelete('{{genre}}')">Delete</a>
+				<a id="continue-deletion" style="display:none" href="delete-genre.py?genre={{genre}}"></a>
+					<script>
+						function confirmDelete(genre) {
+							if (confirm('Are you sure you want to delete genre ' + genre + '?')) {
+								document.getElementById("continue-deletion").click()
+							}
+						}
+					</script>
+			</div>
+        		{% endif %}
+            </h2>
+	    <hr>
+            <h6><p class="lead">{{genredesc}}<p></h6>
+	    {% elif publisher != None %}
+	    <h2>Published by {{publisher}}</h2>
+            <hr>
+	    {% endif %}
+            
+          {%- if genre == None and titles|length == 0 -%}
+          No results found for '{{search}}'.
+          {% else %}
+          <div class="row">
+            {% for title in titles %}
+            <div class="col-sm- col-lg-3">
+              <div class="panel panel-default">
+              <div class="panel-body" style="height:300px;">
+              <center> 
+              <a href="comic-book-item.py?ISBN={{title[0]}}" ><img src= {{title[5]}} style="height:170px;" margin=15px> </img></a>
+              <h5><a href="comic-book-item.py?ISBN={{title[0]}}" style="color: #B00000 ">{{title[1]}}</a></h5>
+              <p><h6>Price: P{{title[2]}}</h6></p>
+              <p><a class="btn btn-info" href="comic-book-item.py?ISBN={{title[0]}}" role="button">Learn more &raquo;</a></p>
+              </center>
+            </div>
+            </div>
+            </div><!--/.col-xs-6.col-lg-4-->
+            {% endfor %}
+          </div><!--/row-->
+          {% endif %}
+        </div><!--/.col-xs-12.col-sm-9-->   
+
+{% endblock %}

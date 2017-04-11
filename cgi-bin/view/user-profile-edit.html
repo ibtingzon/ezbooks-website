@@ -1,0 +1,75 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+	<link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+	<link type="text/css" href="view/css/jquery-ui.css" rel="stylesheet">
+	 
+            <div class="col-md-9">
+
+                {%- if (userprof[2] == user[2]) or (user[9]=='Y') -%}
+                <div class="thumbnail">
+                	<div class="col-md-4 left-side">
+                        <center>
+                        <img class="img-responsive" src="{{userprof[7]}}" style="width:200px;padding-top:30px;padding-bottom:20px;">
+                        </center>
+                    </div>
+                    <div id="desc" class="col-md-8 right-side" style="padding-top:25px">
+                        <header>  
+                        <h4><strong>{{userprof[2]}}</strong></h4> 
+                        </header>                        
+                        <hr>
+			<form  id="form-user" method="post" enctype="multipart/form-data" action="update-user.py?user={{userprof[2]}}">			
+			<table>
+                        	<tr>
+			  		<td><p><strong>First Name: </strong></p></td>
+                                        <td><p><input type="text"  name="first_name"  value="{{userprof[0]}}" required /> </p></td>
+				</tr>
+				<tr>
+					<td><p><strong>Last Name: </strong></p></td>
+                                        <td><p><input type="text" name="last_name" value="{{userprof[1]}}" required /> </p></td>
+				</tr>
+				<tr>
+                                        <td><p><strong>Password: </strong></p></td>
+                                        <td><p><input type="password" name="new_password" value="{{userprof[3]}}" required /> 
+					       <input type="hidden" name="current_password" value="{{userprof[3]}}" />
+					   </p></td>
+                                </tr>
+                        	<tr>
+                                        <td><p><strong>Country: </strong></p></td>
+                                        <td><p>{{countryDropDown}}</p></td>
+                                </tr>
+				<tr>
+                                        <td><p><strong>Birthdate: </strong></p></td>
+                                        <td><p><input type="date" id="birth_date" name="birth_date" maxlength="10" size="8" value="{{userprof[6]}}" format="yyyy/mm/dd"></p></td>
+				</tr>
+				<tr>
+					<td><p><strong>Image:</strong></p></td>
+					<td><p><input id="image_file" name="image_file" type="file" class="file-loading" ></p></td>
+
+                                </tr>
+			        {% if user[9] == "Y" and (user[2] != userprof[2]) %}
+				<tr>
+                                        <td><p><strong>Is Administrator: </strong></p></td>
+					<td><p>
+						&nbsp;<input type="radio" name="is_administrator" value="Y" {% if userprof[9] == "Y" %} checked {% endif %}> Yes
+						&nbsp;<input type="radio" name="is_administrator" value="N" {% if userprof[9] == "N" %} checked {% endif %}> No
+					</p></td>
+				</tr>
+				{% endif %}
+                        </table>
+                        <br />
+			<p align = "right">
+				<input class="btn btn-success" type="submit" value="Save"></input>
+				<a class="btn btn-danger" href="user-profile.py?user={{userprof[2]}}" role="button" >Cancel</a> 
+                        </p>
+			</form >
+			<br />
+                    </div>
+                </div>
+                {%- else -%}
+		<div class="panel panel-danger">
+			<div class="panel-body">You don't have permission to access this page!</div>
+                </div>
+                {%- endif -%}
+            </div>
+{% endblock %}

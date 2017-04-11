@@ -1,0 +1,215 @@
+{% extends "sidebar.html" %}
+
+{% block form %}
+    <style>
+            body {
+              padding-top: 70px;
+              background-color: #eee;
+            }
+            .panel-body{
+                height: 300px;
+            }
+            .lead{
+                font-size: 17px;
+            }
+            table{
+                width: 100%;
+                table-layout:fixed;
+            }
+            td.head{
+                width: 15%;
+            }
+            td.body{
+                width: 50%;
+            }
+            hr {
+              display: block;
+              height: 1px;
+              border: 0;
+              border-top: 1px solid #ccc;
+              margin: 1em 0;
+              padding: 0; 
+            }
+    </style>
+    <link type="text/css" href="view/css/user-profile.css" rel="stylesheet">
+    <link type="text/css" href="view/css/jquery-ui.css" rel="stylesheet">
+
+    <div class="col-sm-9" style="overflow:visible;">
+    <div class="list-group-item" style="background-color:#222; color:#aaa; "> 
+        <h4> 
+            {% if state == "create" -%}
+            Create New Comic Book 
+            {% else %}
+            Update Comic Book
+            {% endif %}
+        </h4></div>
+    <div class="thumbnail" style="padding:50px; padding-top:10px; padding-bottom:20px; overflow: visible;">
+
+    {% if (user[9]=='Y') -%}
+    {%- if error -%}
+        <div class="panel panel-danger" >
+                        <div>{{error}}</div>
+                </div>
+    {% endif %}
+        <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </td></p>
+
+        {% if state == "create" -%}
+        <form   method="POST" enctype="multipart/form-data"  action="create-comic-book.py?action=save">
+        {% else %}
+        <form   method="POST" enctype="multipart/form-data"  action="update-comic-book.py?action=save">
+        {% endif %}
+        <table>
+        
+        <tr>
+        <td class="head"><strong>ISBN</td></strong>
+        <td class="body"><p>
+            <input class="form-control"  name="ISBN" type="text" value="{{bookform[0]}}" placeholder="ISBN" style="width:250px;"required /> 
+        </p></td> 
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Title</strong></td>
+        <td class="body">
+            <input class="form-control"  name="title" type="text" placeholder="Title" value="{{bookform[1]}}" style="width:250px;"  required /> 
+        </td>
+        </tr>
+
+        <tr>
+        <td class="head"><p><strong>Writers</p></strong></td>
+        <td class="body"><p><br> 
+        <select class="head" id="writers" name="writers" multiple="multiple" required >
+         {{writers}}
+        </select>
+        <!-- Initialize the plugin: -->
+        <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#writers').multiselect({includeSelectAllOption: true,enableFiltering: true});
+                });
+        </script>
+        </p></td>          
+        </tr>
+        <tr><td class="head"></td><td class="body"><p>Writer not in the list? <a href="writer-profile.py?action=create">Create a new writer.</a> </p></td></tr>
+
+        <tr>
+        <td class="head"><strong>Illustrators</strong></td>
+        <td class="body"><p>
+        <select class="head" id="illustrators" name="illustrators" multiple="multiple">
+         {{illustrators}}
+        </select>
+        <!-- Initialize the plugin: -->
+        <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#illustrators').multiselect({includeSelectAllOption: true,enableFiltering: true});
+                });
+        </script>
+        </p></td> 
+        </tr>
+        <tr><td class="head"></td>
+            <td class="body"><p>Illustrator not in the list? <a href="illustrator-profile.py?action=create">Create a new illustrator.</a> </p></td>
+        </tr>
+        
+        <tr>
+        <td class="head"><strong>Genres</strong></td>
+        <td class="body"><p>
+        <select class="head" id="genres" name="genres" multiple="multiple" required  >
+         {{genres}}
+        </select>
+        <!-- Initialize the plugin: -->
+        <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#genres').multiselect({includeSelectAllOption: true,enableFiltering: true});
+                });
+        </script>
+        </p></td>  
+        </tr>
+        <tr>
+            <td class="head"></td>
+            <td class="body"><p>Genre not in the list? <a href="create-update-genre.py">Create a new genre.</a> </p></td>
+        </tr>
+
+        <tr>
+            <td class="head"><p><strong>Image:</strong></p></td>
+            <td class="body"><p><input id="image_file" name="image_file" type="file" accept="image/*" class="file-loading"></p></td>
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Price</strong></td></td></p>
+        <td class="body"><p>
+            <input class="form-control" name="price" type="number" placeholder="Price" value="{{bookform[2]}}" style="width:100px;"  required /> 
+        </p></td>  
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Publisher</strong></td>
+        <td class="body"><p>
+            <input class="form-control" name="publisher" type="text" placeholder="Publisher" value="{{bookform[3]}}" style="width:250px;"  required /> 
+        </p></td> 
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Date Published</strong></td>
+         <td class="body"><p>
+            <input class="form-control" name="datepub" type="date" placeholder="Date Published" value="{{bookform[6]}}" style="width:160px;"  required /> 
+        </p></td> 
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Format</strong></td>
+        <td class="body"><p>
+            <input class="form-control" name="format" type="text" placeholder="Format" value="{{bookform[8]}}" style="width:250px;"  required /> 
+        </p></td> 
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Length</strong></td>
+         <td class="body"><p>
+            <input class="form-control" name="length" type="number" placeholder="Length" value="{{bookform[7]}}" style="width:100px;"  required /> 
+        </p></td> 
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Literary Awards</strong></td>
+         <td class="body"><p>
+        <textarea class="form-control"  name="awards" type="text" rows="3" value="{{bookform[10]}}"placeholder="Literary Awards" >{% for award in bookform[10] %}{{award}}{%- if loop.index < bookform[10]|length -%},{% endif %}{% endfor %}</textarea>
+        <p>*Separate each literary award using a comma.</td></p>
+          </td></p>
+        </tr>
+
+        <tr>
+        <td class="head"><strong>Description </strong></td>
+        <td class="body">
+        <p>
+        <textarea class="form-control" name="desc" type="text" placeholder="Description" rows="3" required >{{bookform[4]}}</textarea>
+        </p>
+        </td> 
+        </tr>
+
+	<tr>
+        <td class="head"><strong>Stocks Left</strong></td>
+         <td class="body"><p>
+            <input class="form-control" name="stock" type="number" placeholder="Stock" value="{{bookform[9]}}" style="width:100px;"  required />
+        </p></td>
+        </tr>
+
+        </table>
+        <br>
+
+        <p class="lead" align="right">
+            <input class="btn btn-success" type="submit" value="Save" style="width:100px;"></input>
+            {% if book == None %}
+                <a class="btn btn-danger" href="home.py?" role="button" style="width:100px;">Cancel</a>
+            {% else %}
+                <a class="btn btn-danger" href="home.py?isbn={{bookform[0]}}" role="button" style="width:100px;">Cancel</a>
+            {% endif %} 
+        </td></p>
+        </form >
+    {% else %}
+    <div class="panel panel-danger">
+        <div class="panel-body">You don't have permission to access this page!</div>
+        </div>
+    {% endif %}  
+    </div>    
+    </div>  
+{% endblock %}
